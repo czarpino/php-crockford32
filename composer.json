@@ -1,0 +1,26 @@
+{
+    "name": "czarpino/php-crockford32",
+    "description": "PHP implementation for Douglas Crockford's Base32 notation",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^12.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Czarpino\\PhpCrockford32\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Czarpino\\PhpCrockford32\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Czar Pino",
+            "email": "inbox@czarpino.com"
+        }
+    ],
+    "require": {}
+}
