@@ -76,8 +76,6 @@ class CrockfordBase32
         'Z' => 0b11111,
     ];
 
-    private const SEPARATOR = '-';
-
     public function encode(int $number): string
     {
         if ($number >= count(self::ENCODING_SYMBOLS_LOOKUP)) {
@@ -90,22 +88,27 @@ class CrockfordBase32
 
     public function decode(string $encoded): int
     {
-        if ('' === $encoded) {
+        // strip separators
+        $cleaned = str_replace('-', '', $encoded);
+        if ('' === $cleaned) {
             throw new Base32ConversionException('Invalid base32 number');
         }
 
-        $decoded = 0;
-        $digits = str_split($encoded);
-        $digitCount = count($digits);
+        // normalize encoded string
+        $normalized = str_replace(
+            ['I', 'L', 'O'],
+            ['1', '1', '0'],
+            strtoupper($cleaned)
+        );
 
-        for ($i = 0; $i < $digitCount; $i++) {
-            $currentDigit = $digits[$digitCount - $i - 1];
-            $value = self::DECODING_SYMBOLS_LOOKUP[$currentDigit] ?? null;
+        $decoded = 0;
+        foreach (str_split($normalized) as $digit) {
+            $value = self::DECODING_SYMBOLS_LOOKUP[$digit] ?? null;
             if (null === $value) {
                 throw new Base32ConversionException('Invalid base32 number');
             }
 
-            $decoded += $value * 32 ** $i;
+            $decoded = $decoded * 32 + $value;
         }
 
         return $decoded;
