@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Czarpino\PhpCrockford32;
 
+/**
+ * PHP implementation of CrockfordBase32 encoding
+ *
+ * @author Czar Pino <inbox@czarpino.com>
+ */
 class CrockfordBase32
 {
     private const ENCODING_SYMBOLS_LOOKUP = [
@@ -76,6 +81,12 @@ class CrockfordBase32
         'Z' => 0b11111,
     ];
 
+    /**
+     * Encode a number to Crockford Base32
+     *
+     * @param int $number
+     * @return string
+     */
     public function encode(int $number): string
     {
         if ($number < 32) {
@@ -91,6 +102,13 @@ class CrockfordBase32
         return $encoded;
     }
 
+    /**
+     * Decode a Crockford Base32 encoded number
+     *
+     * @param string $encoded
+     * @return int
+     * @throws Base32ConversionException
+     */
     public function decode(string $encoded): int
     {
         // strip separators
@@ -118,6 +136,4 @@ class CrockfordBase32
 
         return $decoded;
     }
-
-    // TODO: checksums
 }
