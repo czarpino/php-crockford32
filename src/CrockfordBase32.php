@@ -78,12 +78,17 @@ class CrockfordBase32
 
     public function encode(int $number): string
     {
-        if ($number >= count(self::ENCODING_SYMBOLS_LOOKUP)) {
-            $lastDigit = $number % count(self::ENCODING_SYMBOLS_LOOKUP);
-            $encoded = $this->encode((int)($number / count(self::ENCODING_SYMBOLS_LOOKUP)));
-            return $encoded . self::ENCODING_SYMBOLS_LOOKUP[$lastDigit];
+        if ($number < 32) {
+            return self::ENCODING_SYMBOLS_LOOKUP[$number];
         }
-        return self::ENCODING_SYMBOLS_LOOKUP[$number];
+
+        $encoded = '';
+        do {
+            $encoded = self::ENCODING_SYMBOLS_LOOKUP[$number % 32] . $encoded;
+            $number = (int) ($number / 32);
+        } while($number > 0);
+
+        return $encoded;
     }
 
     public function decode(string $encoded): int
@@ -113,4 +118,6 @@ class CrockfordBase32
 
         return $decoded;
     }
+
+    // TODO: checksums
 }
