@@ -6,7 +6,7 @@ namespace Czarpino\PhpCrockford32;
 
 class CrockfordBase32
 {
-    private const SYMBOLS = [
+    private const ENCODING_SYMBOLS_LOOKUP = [
         '0',
         '1',
         '2',
@@ -41,13 +41,73 @@ class CrockfordBase32
         'Z',
     ];
 
+    private const DECODING_SYMBOLS_LOOKUP = [
+        '0' => 0b00000,
+        '1' => 0b00001,
+        '2' => 0b00010,
+        '3' => 0b00011,
+        '4' => 0b00100,
+        '5' => 0b00101,
+        '6' => 0b00110,
+        '7' => 0b00111,
+        '8' => 0b01000,
+        '9' => 0b01001,
+        'A' => 0b01010,
+        'B' => 0b01011,
+        'C' => 0b01100,
+        'D' => 0b01101,
+        'E' => 0b01110,
+        'F' => 0b01111,
+        'G' => 0b10000,
+        'H' => 0b10001,
+        'J' => 0b10010,
+        'K' => 0b10011,
+        'M' => 0b10100,
+        'N' => 0b10101,
+        'P' => 0b10110,
+        'Q' => 0b10111,
+        'R' => 0b11000,
+        'S' => 0b11001,
+        'T' => 0b11010,
+        'V' => 0b11011,
+        'W' => 0b11100,
+        'X' => 0b11101,
+        'Y' => 0b11110,
+        'Z' => 0b11111,
+    ];
+
+    private const SEPARATOR = '-';
+
     public function encode(int $number): string
     {
-        if ($number >= count(self::SYMBOLS)) {
-            $lastDigit = $number % count(self::SYMBOLS);
-            $encoded = $this->encode((int)($number / count(self::SYMBOLS)));
-            return $encoded . self::SYMBOLS[$lastDigit];
+        if ($number >= count(self::ENCODING_SYMBOLS_LOOKUP)) {
+            $lastDigit = $number % count(self::ENCODING_SYMBOLS_LOOKUP);
+            $encoded = $this->encode((int)($number / count(self::ENCODING_SYMBOLS_LOOKUP)));
+            return $encoded . self::ENCODING_SYMBOLS_LOOKUP[$lastDigit];
         }
-        return self::SYMBOLS[$number];
+        return self::ENCODING_SYMBOLS_LOOKUP[$number];
+    }
+
+    public function decode(string $encoded): int
+    {
+        if ('' === $encoded) {
+            throw new Base32ConversionException('Invalid base32 number');
+        }
+
+        $decoded = 0;
+        $digits = str_split($encoded);
+        $digitCount = count($digits);
+
+        for ($i = 0; $i < $digitCount; $i++) {
+            $currentDigit = $digits[$digitCount - $i - 1];
+            $value = self::DECODING_SYMBOLS_LOOKUP[$currentDigit] ?? null;
+            if (null === $value) {
+                throw new Base32ConversionException('Invalid base32 number');
+            }
+
+            $decoded += $value * 32 ** $i;
+        }
+
+        return $decoded;
     }
 }
