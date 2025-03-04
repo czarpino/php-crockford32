@@ -142,6 +142,12 @@ class CrockfordBase32
         return $decoded;
     }
 
+    /**
+     * Encode a number to Crockford Base32 with a check symbol
+     *
+     * @param int $number
+     * @return string
+     */
     public function encodeWithCheckSymbol(int $number): string
     {
         return $this->encode($number) . self::ENCODING_SYMBOLS_LOOKUP[$number % 37];
