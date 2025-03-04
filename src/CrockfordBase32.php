@@ -44,6 +44,11 @@ class CrockfordBase32
         'X',
         'Y',
         'Z',
+        '*',
+        '~',
+        '$',
+        '=',
+        'U',
     ];
 
     private const DECODING_SYMBOLS_LOOKUP = [
@@ -135,5 +140,25 @@ class CrockfordBase32
         }
 
         return $decoded;
+    }
+
+    public function encodeWithCheckSymbol(int $number): string
+    {
+        return $this->encode($number) . self::ENCODING_SYMBOLS_LOOKUP[$number % 37];
+    }
+
+    public function verifyCheckSymbol(string $encoded): bool
+    {
+        return false;
+    }
+
+    /**
+     * @param string $encoded
+     * @return int
+     * @throws Base32ConversionException
+     */
+    public function decodeWithCheckSymbol(string $encoded): int
+    {
+        return 0;
     }
 }
