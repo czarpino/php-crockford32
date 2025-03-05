@@ -105,7 +105,7 @@ class CrockfordBase32
         $encoded = '';
         do {
             $encoded = self::ENCODING_SYMBOLS_LOOKUP[$number % 32] . $encoded;
-            $number = (int) ($number / 32);
+            $number = intdiv($number, 32);
         } while($number > 0);
 
         return $encoded;
