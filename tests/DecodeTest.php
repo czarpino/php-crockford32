@@ -19,6 +19,67 @@ class DecodeTest extends TestCase
         ];
     }
 
+    public static function provide5BitNumbers(): array
+    {
+        return [
+            '0 is decoded as 0' => [0, '0'],
+            '1 is decoded as 1' => [1, '1'],
+            '2 is decoded as 2' => [2, '2'],
+            '3 is decoded as 3' => [3, '3'],
+            '4 is decoded as 4' => [4, '4'],
+            '5 is decoded as 5' => [5, '5'],
+            '6 is decoded as 6' => [6, '6'],
+            '7 is decoded as 7' => [7, '7'],
+            '8 is decoded as 8' => [8, '8'],
+            '9 is decoded as 9' => [9, '9'],
+            'A is decoded as 10' => [10, 'A'],
+            'B is decoded as 11' => [11, 'B'],
+            'C is decoded as 12' => [12, 'C'],
+            'D is decoded as 13' => [13, 'D'],
+            'E is decoded as 14' => [14, 'E'],
+            'F is decoded as 15' => [15, 'F'],
+            'G is decoded as 16' => [16, 'G'],
+            'H is decoded as 17' => [17, 'H'],
+            'J is decoded as 18' => [18, 'J'],
+            'K is decoded as 19' => [19, 'K'],
+            'M is decoded as 20' => [20, 'M'],
+            'N is decoded as 21' => [21, 'N'],
+            'P is decoded as 22' => [22, 'P'],
+            'Q is decoded as 23' => [23, 'Q'],
+            'R is decoded as 24' => [24, 'R'],
+            'S is decoded as 25' => [25, 'S'],
+            'T is decoded as 26' => [26, 'T'],
+            'V is decoded as 27' => [27, 'V'],
+            'W is decoded as 28' => [28, 'W'],
+            'X is decoded as 29' => [29, 'X'],
+            'Y is decoded as 30' => [30, 'Y'],
+            'Z is decoded as 31' => [31, 'Z'],
+        ];
+    }
+
+    public static function provide10To30BitNumbers(): array
+    {
+        return [
+            '10-bit: ZZ is decoded to 0b11111_11111' => [0b11111_11111, 'ZZ'],
+            '15-bit: ZZ-Z is decoded to 0b11111_11111_11111' => [0b11111_11111_11111, 'ZZZ'],
+            '20-bit: ZZ-ZZ is decoded to 0b11111_11111_11111_11111' => [0b11111_11111_11111_11111, 'ZZZZ'],
+            '25-bit: ZZ-ZZ-Z is decoded to 0b11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111, 'ZZZZZ'],
+            '30-bit: ZZ-ZZ-ZZ is decoded to 0b11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111, 'ZZZZZZ'],
+        ];
+    }
+
+    public static function provide35To60BitNumbers(): array
+    {
+        return [
+            '35-bit: ZZ-ZZ-ZZ-Z is decoded to 0b11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZ'],
+            '40-bit: ZZ-ZZ-ZZ-ZZ is decoded to 0b11111_11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZZ'],
+            '45-bit: ZZ-ZZ-ZZ-ZZ-Z is decoded to 0b11111_11111_11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZZZ'],
+            '50-bit: ZZ-ZZ-ZZ-ZZ-ZZ is decoded to 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZZZZ'],
+            '55-bit: ZZ-ZZ-ZZ-ZZ-ZZ-Z is decoded to 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZZZZZ'],
+            '60-bit: ZZ-ZZ-ZZ-ZZ-ZZ-ZZ is decoded to 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZZZZZZ'],
+        ];
+    }
+
     #[DataProvider('provideInvalidBase32Numbers')]
     public function testThrowsExceptionWhenInputContainsInvalidCharacters(string $invalidBase32Number): void
     {
@@ -28,140 +89,12 @@ class DecodeTest extends TestCase
         $crockfordBase32->decode($invalidBase32Number);
     }
 
-    public function testCanDecode5BitNumber(): void
+    #[DataProvider('provide5BitNumbers')]
+    #[DataProvider('provide10To30BitNumbers')]
+    #[DataProvider('provide35To60BitNumbers')]
+    public function testCanDecode(int $decoded, string $encoded): void
     {
         $crockfordBase32 = new CrockfordBase32();
-        $this->assertEquals(0, $crockfordBase32->decode('0'));
-        $this->assertEquals(1, $crockfordBase32->decode('1'));
-        $this->assertEquals(2, $crockfordBase32->decode('2'));
-        $this->assertEquals(3, $crockfordBase32->decode('3'));
-        $this->assertEquals(4, $crockfordBase32->decode('4'));
-        $this->assertEquals(5, $crockfordBase32->decode('5'));
-        $this->assertEquals(6, $crockfordBase32->decode('6'));
-        $this->assertEquals(7, $crockfordBase32->decode('7'));
-        $this->assertEquals(8, $crockfordBase32->decode('8'));
-        $this->assertEquals(9, $crockfordBase32->decode('9'));
-        $this->assertEquals(10, $crockfordBase32->decode('A'));
-        $this->assertEquals(11, $crockfordBase32->decode('B'));
-        $this->assertEquals(12, $crockfordBase32->decode('C'));
-        $this->assertEquals(13, $crockfordBase32->decode('D'));
-        $this->assertEquals(14, $crockfordBase32->decode('E'));
-        $this->assertEquals(15, $crockfordBase32->decode('F'));
-        $this->assertEquals(16, $crockfordBase32->decode('G'));
-        $this->assertEquals(17, $crockfordBase32->decode('H'));
-        $this->assertEquals(18, $crockfordBase32->decode('J'));
-        $this->assertEquals(19, $crockfordBase32->decode('K'));
-        $this->assertEquals(20, $crockfordBase32->decode('M'));
-        $this->assertEquals(21, $crockfordBase32->decode('N'));
-        $this->assertEquals(22, $crockfordBase32->decode('P'));
-        $this->assertEquals(23, $crockfordBase32->decode('Q'));
-        $this->assertEquals(24, $crockfordBase32->decode('R'));
-        $this->assertEquals(25, $crockfordBase32->decode('S'));
-        $this->assertEquals(26, $crockfordBase32->decode('T'));
-        $this->assertEquals(27, $crockfordBase32->decode('V'));
-        $this->assertEquals(28, $crockfordBase32->decode('W'));
-        $this->assertEquals(29, $crockfordBase32->decode('X'));
-        $this->assertEquals(30, $crockfordBase32->decode('Y'));
-        $this->assertEquals(31, $crockfordBase32->decode('Z'));
-    }
-
-    public function testCanDecode10To30BitNumbers(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        $this->assertEquals(0b00000_00001, $crockfordBase32->decode('10'));
-        $this->assertEquals(0b00000_00010, $crockfordBase32->decode('20'));
-        $this->assertEquals(0b00000_00011, $crockfordBase32->decode('30'));
-    }
-
-    public function testCanDecode10BitNumber(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(0b00001_00000, $crockfordBase32->decode('10'));
-        self::assertEquals(0b00010_00000, $crockfordBase32->decode('20'));
-        self::assertEquals(0b00011_00000, $crockfordBase32->decode('30'));
-        self::assertEquals(0b00011_00001, $crockfordBase32->decode('31'));
-        self::assertEquals(0b00011_00010, $crockfordBase32->decode('32'));
-        self::assertEquals(0b00011_00011, $crockfordBase32->decode('33'));
-    }
-
-    public function testCanDecode15BitNumber(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(0b00001_00000_00000, $crockfordBase32->decode('100'));
-        self::assertEquals(0b00010_00000_00000, $crockfordBase32->decode('200'));
-        self::assertEquals(0b00011_00000_00000, $crockfordBase32->decode('300'));
-        self::assertEquals(0b00011_00000_00001, $crockfordBase32->decode('301'));
-        self::assertEquals(0b00011_00000_00010, $crockfordBase32->decode('302'));
-        self::assertEquals(0b00011_00000_00011, $crockfordBase32->decode('303'));
-    }
-
-//    public function testCanDecodeMultipleDigits(): void
-//    {
-//        $crockfordBase32 = new CrockfordBase32();
-//        self::assertEquals(
-//            0b10000_10000_10000_10000_10000_10000_10000_10000_10000_10000,
-//            $crockfordBase32->decode('GGGGGGGGGG')
-//        );
-//        self::assertEquals(
-//            0b00000_00001_10010_10101_01011_01010_10010_00000_11110_01010,
-//            $crockfordBase32->decode('01JNBAJ0YA')
-//        );
-//    }
-
-    public function testIgnoresHyphens(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(
-            0b00000_00001_10010_10101_01011_01010_10010_00000_11110_01010,
-            $crockfordBase32->decode('01-JN-BA-J0-YA')
-        );
-    }
-
-    public function testIgnoresCapitalization(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(
-            0b00000_00001_10010_10101_01011_01010_10010_00000_11110_01010,
-            $crockfordBase32->decode('01-jn-ba-j0-ya')
-        );
-    }
-
-    public function testIgnoresConvertsLetterIToNumber1(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(
-            0b00001_00001_00001,
-            $crockfordBase32->decode('III')
-        );
-        self::assertEquals(
-            0b00001_00001_00001,
-            $crockfordBase32->decode('iii')
-        );
-    }
-
-    public function testIgnoresConvertsLetterLToNumber1(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(
-            0b00001_00001_00001,
-            $crockfordBase32->decode('LLL')
-        );
-        self::assertEquals(
-            0b00001_00001_00001,
-            $crockfordBase32->decode('lll')
-        );
-    }
-
-    public function testIgnoresConvertsLetterOToNumber0(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(
-            0b00001_00000_00000,
-            $crockfordBase32->decode('1OO')
-        );
-        self::assertEquals(
-            0b00001_00000_00000,
-            $crockfordBase32->decode('1oo')
-        );
+        $this->assertEquals($decoded, $crockfordBase32->decode($encoded));
     }
 }
