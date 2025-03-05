@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Czarpino\PhpCrockford32\Tests;
 
+use Czarpino\PhpCrockford32\Base32ConversionException;
 use Czarpino\PhpCrockford32\CrockfordBase32;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -67,6 +68,14 @@ class EncodeTest extends TestCase
             '0b1000_00000_00000 is encoded to 800' => [0b1000_00000_00000, '800'],
             '0b10000_00000_00000 is encoded to G00' => [0b10000_00000_00000, 'G00'],
         ];
+    }
+
+    public function testThrowsExceptionWhenEncodingNegativeNumber(): void
+    {
+        $crockfordBase32 = new CrockfordBase32();
+        $this->expectException(Base32ConversionException::class);
+        $this->expectExceptionMessage('Cannot encode negative numbers');
+        $crockfordBase32->encode(-1);
     }
 
     #[DataProvider('provideSymbols')]

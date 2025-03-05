@@ -94,6 +94,10 @@ class CrockfordBase32
      */
     public function encode(int $number): string
     {
+        if ($number < 0) {
+            throw new Base32ConversionException('Cannot encode negative numbers');
+        }
+
         if ($number < 32) {
             return self::ENCODING_SYMBOLS_LOOKUP[$number];
         }
