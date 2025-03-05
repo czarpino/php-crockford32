@@ -144,6 +144,14 @@ class CrockfordBase32
         return $decoded;
     }
 
+    /**
+     * Generate a check symbol for a number which can be used to
+     * verify the integrity of the encoded string.
+     *
+     * @param int $number
+     * @return string
+     * @throws Base32ConversionException when number is negative
+     */
     public function checksum(int $number): string
     {
         if ($number < 0) {
