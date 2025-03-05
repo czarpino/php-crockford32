@@ -142,29 +142,9 @@ class CrockfordBase32
         return $decoded;
     }
 
-    /**
-     * Encode a number to Crockford Base32 with a check symbol
-     *
-     * @param int $number
-     * @return string
-     */
-    public function encodeWithCheckSymbol(int $number): string
+    // TODO: implement and remove encodeWithCheckSymbol
+    public function checksum(int $number): string
     {
-        return $this->encode($number) . self::ENCODING_SYMBOLS_LOOKUP[$number % 37];
-    }
-
-    public function verifyCheckSymbol(string $encoded): bool
-    {
-        return false;
-    }
-
-    /**
-     * @param string $encoded
-     * @return int
-     * @throws Base32ConversionException
-     */
-    public function decodeWithCheckSymbol(string $encoded): int
-    {
-        return 0;
+        return '';
     }
 }
