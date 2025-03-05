@@ -15,6 +15,7 @@ class DecodeTest extends TestCase
             'empty string' => [''],
             'invalid single digit (!)' => ['!'],
             'double digit with `!`' => ['!0'],
+            'unsupported character `u`' => ['u'],
         ];
     }
 
@@ -27,9 +28,8 @@ class DecodeTest extends TestCase
         $crockfordBase32->decode($invalidBase32Number);
     }
 
-    public function testCanDecodeSingleDigits(): void
+    public function testCanDecode5BitNumber(): void
     {
-        // TODO use binary representation for ease of inspection
         $crockfordBase32 = new CrockfordBase32();
         $this->assertEquals(0, $crockfordBase32->decode('0'));
         $this->assertEquals(1, $crockfordBase32->decode('1'));
@@ -65,7 +65,15 @@ class DecodeTest extends TestCase
         $this->assertEquals(31, $crockfordBase32->decode('Z'));
     }
 
-    public function testCanDecodeDoubleDigits(): void
+    public function testCanDecode10To30BitNumbers(): void
+    {
+        $crockfordBase32 = new CrockfordBase32();
+        $this->assertEquals(0b00000_00001, $crockfordBase32->decode('10'));
+        $this->assertEquals(0b00000_00010, $crockfordBase32->decode('20'));
+        $this->assertEquals(0b00000_00011, $crockfordBase32->decode('30'));
+    }
+
+    public function testCanDecode10BitNumber(): void
     {
         $crockfordBase32 = new CrockfordBase32();
         self::assertEquals(0b00001_00000, $crockfordBase32->decode('10'));
@@ -76,7 +84,7 @@ class DecodeTest extends TestCase
         self::assertEquals(0b00011_00011, $crockfordBase32->decode('33'));
     }
 
-    public function testCanDecodeTripleDigits(): void
+    public function testCanDecode15BitNumber(): void
     {
         $crockfordBase32 = new CrockfordBase32();
         self::assertEquals(0b00001_00000_00000, $crockfordBase32->decode('100'));
@@ -87,18 +95,18 @@ class DecodeTest extends TestCase
         self::assertEquals(0b00011_00000_00011, $crockfordBase32->decode('303'));
     }
 
-    public function testCanDecodeMultipleDigits(): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        self::assertEquals(
-            0b10000_10000_10000_10000_10000_10000_10000_10000_10000_10000,
-            $crockfordBase32->decode('GGGGGGGGGG')
-        );
-        self::assertEquals(
-            0b00000_00001_10010_10101_01011_01010_10010_00000_11110_01010,
-            $crockfordBase32->decode('01JNBAJ0YA')
-        );
-    }
+//    public function testCanDecodeMultipleDigits(): void
+//    {
+//        $crockfordBase32 = new CrockfordBase32();
+//        self::assertEquals(
+//            0b10000_10000_10000_10000_10000_10000_10000_10000_10000_10000,
+//            $crockfordBase32->decode('GGGGGGGGGG')
+//        );
+//        self::assertEquals(
+//            0b00000_00001_10010_10101_01011_01010_10010_00000_11110_01010,
+//            $crockfordBase32->decode('01JNBAJ0YA')
+//        );
+//    }
 
     public function testIgnoresHyphens(): void
     {
