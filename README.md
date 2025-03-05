@@ -37,3 +37,8 @@ $crockfordBase32 = new CrockfordBase32();
 $decoded = $crockfordBase32->decode($encoded);
 $isValid = $checksum === $crockfordBase32->checksum($decoded);
 ```
+
+## Installation
+```bash
+composer require czarpino/php-crockford32
+```
