@@ -3,7 +3,7 @@
 A simple and faithful implementation of Douglas Crockford's Base32 encoding in PHP as specified in https://www.crockford.com/base32.html. Supports encoding and decoding of up to 60-bit integers.
 
 ## Usage
-Encode and decode integers from 0 up to `1152921504606846975`(largest 60-bit). Since Crockford32 processes 5 bits at a time, the full 60-65-bit range is not fully supported in a 64-bit system. The same applies to 30-35-bit range on a 32-bit system.
+Encode and decode integers from 0 up to `1152921504606846975`(largest 60-bit). The full 60-65-bit range is not fully supported in a 64-bit system. The same applies to 30-35-bit range on a 32-bit system.
 
 ```php
 use Czarpino\PhpCrockford32\CrockfordBase32;
