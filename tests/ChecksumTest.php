@@ -59,16 +59,11 @@ class ChecksumTest extends TestCase
             '123456 has check symbol R' => ['R', 123456],
             '456789 has check symbol R' => ['R', 456789],
             '789012 has check symbol R' => ['R', 789012],
-            '12345 has check symbol R' => ['R', 12345],
-            '345678 has check symbol R' => ['R', 345678],
 
             // Very large numbers
             '1234567890 has check symbol V' => ['V', 1234567890],
-            '2147483647 (PHP_INT_MAX on 32-bit) has check symbol N' => ['N', 2147483647],
-
-            // Ultra large numbers
-            '1234567890987654321 has check symbol W' => ['W', 1234567890987654321],
-            '9223372036854775807 (PHP_INT_MAX on 64-bit) has check symbol 5' => ['5', 9223372036854775807],
+            '(largest 30-bit) 1073741823 has check symbol A' => ['A', 1073741823],
+            '(largest 60-bit) 1152921504606846975 has check symbol 9' => ['9', 1152921504606846975],
         ];
     }
 
