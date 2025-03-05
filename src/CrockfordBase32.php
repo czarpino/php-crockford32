@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Czarpino\PhpCrockford32;
 
+use InvalidArgumentException;
+
 /**
  * PHP implementation of CrockfordBase32 encoding
  *
@@ -142,9 +144,12 @@ class CrockfordBase32
         return $decoded;
     }
 
-    // TODO: implement and remove encodeWithCheckSymbol
     public function checksum(int $number): string
     {
-        return '';
+        if ($number < 0) {
+            throw new Base32ConversionException('Checksum for negative integer is not supported');
+        }
+
+        return self::ENCODING_SYMBOLS_LOOKUP[$number % 37];
     }
 }
