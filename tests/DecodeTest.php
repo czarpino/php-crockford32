@@ -19,7 +19,7 @@ class DecodeTest extends TestCase
         ];
     }
 
-    public static function provide5BitNumbers(): array
+    public static function provide5BitNumberDecodings(): array
     {
         return [
             '0 is decoded as 0' => [0, '0'],
@@ -57,7 +57,7 @@ class DecodeTest extends TestCase
         ];
     }
 
-    public static function provide10To30BitNumbers(): array
+    public static function provide10To30BitNumberDecodings(): array
     {
         return [
             '10-bit: ZZ is decoded to 0b11111_11111' => [0b11111_11111, 'ZZ'],
@@ -68,7 +68,7 @@ class DecodeTest extends TestCase
         ];
     }
 
-    public static function provide35To60BitNumbers(): array
+    public static function provide35To60BitNumberDecodings(): array
     {
         return [
             '35-bit: ZZ-ZZ-ZZ-Z is decoded to 0b11111_11111_11111_11111_11111_11111_11111' => [0b11111_11111_11111_11111_11111_11111_11111, 'ZZZZZZZ'],
@@ -89,9 +89,9 @@ class DecodeTest extends TestCase
         $crockfordBase32->decode($invalidBase32Number);
     }
 
-    #[DataProvider('provide5BitNumbers')]
-    #[DataProvider('provide10To30BitNumbers')]
-    #[DataProvider('provide35To60BitNumbers')]
+    #[DataProvider('provide5BitNumberDecodings')]
+    #[DataProvider('provide10To30BitNumberDecodings')]
+    #[DataProvider('provide35To60BitNumberDecodings')]
     public function testCanDecode(int $decoded, string $encoded): void
     {
         $crockfordBase32 = new CrockfordBase32();
