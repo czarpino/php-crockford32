@@ -10,41 +10,41 @@ use PHPUnit\Framework\TestCase;
 
 class EncodeTest extends TestCase
 {
-    public static function provideSymbols(): array
+    public static function provide5BitNumberEncodings(): array
     {
         return [
-            '0 is encoded as 0' => [0, '0'],
-            '1 is encoded as 1' => [1, '1'],
-            '2 is encoded as 2' => [2, '2'],
-            '3 is encoded as 3' => [3, '3'],
-            '4 is encoded as 4' => [4, '4'],
-            '5 is encoded as 5' => [5, '5'],
-            '6 is encoded as 6' => [6, '6'],
-            '7 is encoded as 7' => [7, '7'],
-            '8 is encoded as 8' => [8, '8'],
-            '9 is encoded as 9' => [9, '9'],
-            '10 is encoded as A' => [10, 'A'],
-            '11 is encoded as B' => [11, 'B'],
-            '12 is encoded as C' => [12, 'C'],
-            '13 is encoded as D' => [13, 'D'],
-            '14 is encoded as E' => [14, 'E'],
-            '15 is encoded as F' => [15, 'F'],
-            '16 is encoded as G' => [16, 'G'],
-            '17 is encoded as H' => [17, 'H'],
-            '18 is encoded as J' => [18, 'J'],
-            '19 is encoded as K' => [19, 'K'],
-            '20 is encoded as M' => [20, 'M'],
-            '21 is encoded as N' => [21, 'N'],
-            '22 is encoded as P' => [22, 'P'],
-            '23 is encoded as Q' => [23, 'Q'],
-            '24 is encoded as R' => [24, 'R'],
-            '25 is encoded as S' => [25, 'S'],
-            '26 is encoded as T' => [26, 'T'],
-            '27 is encoded as V' => [27, 'V'],
-            '28 is encoded as W' => [28, 'W'],
-            '29 is encoded as X' => [29, 'X'],
-            '30 is encoded as Y' => [30, 'Y'],
-            '31 is encoded as Z' => [31, 'Z'],
+            '5-bit: 0b00000 is encoded to 0' => ['0', 0b00000],
+            '5-bit: 0b00001 is encoded to 1' => ['1', 0b00001],
+            '5-bit: 0b00010 is encoded to 2' => ['2', 0b00010],
+            '5-bit: 0b00011 is encoded to 3' => ['3', 0b00011],
+            '5-bit: 0b00100 is encoded to 4' => ['4', 0b00100],
+            '5-bit: 0b00101 is encoded to 5' => ['5', 0b00101],
+            '5-bit: 0b00110 is encoded to 6' => ['6', 0b00110],
+            '5-bit: 0b00111 is encoded to 7' => ['7', 0b00111],
+            '5-bit: 0b01000 is encoded to 8' => ['8', 0b01000],
+            '5-bit: 0b01001 is encoded to 9' => ['9', 0b01001],
+            '5-bit: 0b01010 is encoded to A' => ['A', 0b01010],
+            '5-bit: 0b01011 is encoded to B' => ['B', 0b01011],
+            '5-bit: 0b01100 is encoded to C' => ['C', 0b01100],
+            '5-bit: 0b01101 is encoded to D' => ['D', 0b01101],
+            '5-bit: 0b01110 is encoded to E' => ['E', 0b01110],
+            '5-bit: 0b01111 is encoded to F' => ['F', 0b01111],
+            '5-bit: 0b10000 is encoded to G' => ['G', 0b10000],
+            '5-bit: 0b10001 is encoded to H' => ['H', 0b10001],
+            '5-bit: 0b10010 is encoded to J' => ['J', 0b10010],
+            '5-bit: 0b10011 is encoded to K' => ['K', 0b10011],
+            '5-bit: 0b10100 is encoded to M' => ['M', 0b10100],
+            '5-bit: 0b10101 is encoded to N' => ['N', 0b10101],
+            '5-bit: 0b10110 is encoded to P' => ['P', 0b10110],
+            '5-bit: 0b10111 is encoded to Q' => ['Q', 0b10111],
+            '5-bit: 0b11000 is encoded to R' => ['R', 0b11000],
+            '5-bit: 0b11001 is encoded to S' => ['S', 0b11001],
+            '5-bit: 0b11010 is encoded to T' => ['T', 0b11010],
+            '5-bit: 0b11011 is encoded to V' => ['V', 0b11011],
+            '5-bit: 0b11100 is encoded to W' => ['W', 0b11100],
+            '5-bit: 0b11101 is encoded to X' => ['X', 0b11101],
+            '5-bit: 0b11110 is encoded to Y' => ['Y', 0b11110],
+            '5-bit: 0b11111 is encoded to Z' => ['Z', 0b11111],
         ];
     }
 
@@ -66,10 +66,8 @@ class EncodeTest extends TestCase
             '40-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZ' => ['ZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111],
             '45-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZ' => ['ZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111],
             '50-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZ' => ['ZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
-
-            // Full range of 55-bit and over do not work on 64-bit PHP
-            //'55-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZZ' => ['ZZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
-            //'60-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZZZ' => ['ZZZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
+            '55-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZZ' => ['ZZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
+            '60-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZZZ' => ['ZZZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
         ];
     }
 
@@ -81,27 +79,11 @@ class EncodeTest extends TestCase
         $crockfordBase32->encode(-1);
     }
 
-    #[DataProvider('provideSymbols')]
-    public function testCanEncode5BitsWithUniqueSymbols(int $value, string $encodeSymbol): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        $this->assertEquals($encodeSymbol, $crockfordBase32->encode($value));
-    }
-
+    #[DataProvider('provide5BitNumberEncodings')]
     #[DataProvider('provide10To30BitNumberEncodings')]
-    public function testCanEncode10To30BitNumbers(string $encoded, int $number): void
-    {
-        $crockfordBase32 = new CrockfordBase32();
-        $this->assertEquals($encoded, $crockfordBase32->encode($number));
-    }
-
     #[DataProvider('provide35To60BitNumberEncodings')]
-    public function testCanEncode35To60BitNumbers(string $encoded, int $number): void
+    public function testCanEncode(string $encoded, int $number): void
     {
-        if (4 === PHP_INT_SIZE) {
-            self::markTestSkipped('Requires 64-bit PHP');
-        }
-
         $crockfordBase32 = new CrockfordBase32();
         $this->assertEquals($encoded, $crockfordBase32->encode($number));
     }
