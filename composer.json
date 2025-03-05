@@ -11,11 +11,6 @@
             "Czarpino\\PhpCrockford32\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Czarpino\\PhpCrockford32\\Tests\\": "tests/"
-        }
-    },
     "authors": [
         {
             "name": "Czar Pino",
