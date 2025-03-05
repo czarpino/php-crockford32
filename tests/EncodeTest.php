@@ -48,25 +48,28 @@ class EncodeTest extends TestCase
         ];
     }
 
-    public static function provide6To10BitNumbers(): array
+    public static function provide10To30BitNumberEncodings(): array
     {
         return [
-            '0b1_00000 is encoded to 10' => [0b1_00000, '10'],
-            '0b10_00000 is encoded to 20' => [0b10_00000, '20'],
-            '0b100_00000 is encoded to 40' => [0b100_00000, '40'],
-            '0b1000_00000 is encoded to 80' => [0b1000_00000, '80'],
-            '0b10000_00000 is encoded to G0' => [0b10000_00000, 'G0'],
+            '10-bit: 0b11111_11111 is encoded to ZZ' => ['ZZ', 0b11111_11111],
+            '15-bit: 0b11111_11111_11111 is encoded to ZZZ' => ['ZZZ', 0b11111_11111_11111],
+            '20-bit: 0b11111_11111_11111_11111 is encoded to ZZZZ' => ['ZZZZ', 0b11111_11111_11111_11111],
+            '25-bit: 0b11111_11111_11111_11111_11111 is encoded to ZZZZZ' => ['ZZZZZ', 0b11111_11111_11111_11111_11111],
+            '30-bit: 0b11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZ' => ['ZZZZZZ', 0b11111_11111_11111_11111_11111_11111],
         ];
     }
 
-    public static function provide11To15BitNumbers(): array
+    public static function provide35To60BitNumberEncodings(): array
     {
         return [
-            '0b1_00000_00000 is encoded to 100' => [0b1_00000_00000, '100'],
-            '0b10_00000_00000 is encoded to 200' => [0b10_00000_00000, '200'],
-            '0b100_00000_00000 is encoded to 400' => [0b100_00000_00000, '400'],
-            '0b1000_00000_00000 is encoded to 800' => [0b1000_00000_00000, '800'],
-            '0b10000_00000_00000 is encoded to G00' => [0b10000_00000_00000, 'G00'],
+            '35-bit: 0b11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZ' => ['ZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111],
+            '40-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZ' => ['ZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111],
+            '45-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZ' => ['ZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111],
+            '50-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZ' => ['ZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
+
+            // Full range of 55-bit and over do not work on 64-bit PHP
+            //'55-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZZ' => ['ZZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
+            //'60-bit: 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111 is encoded to ZZZZZZZZZZZZ' => ['ZZZZZZZZZZZZ', 0b11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111_11111],
         ];
     }
 
@@ -85,17 +88,21 @@ class EncodeTest extends TestCase
         $this->assertEquals($encodeSymbol, $crockfordBase32->encode($value));
     }
 
-    #[DataProvider('provide6To10BitNumbers')]
-    public function testCanEncode6To10BitNumbers(int $_6To10BitNumber, string $expectedEncodedValue): void
+    #[DataProvider('provide10To30BitNumberEncodings')]
+    public function testCanEncode10To30BitNumbers(string $encoded, int $number): void
     {
         $crockfordBase32 = new CrockfordBase32();
-        $this->assertEquals($expectedEncodedValue, $crockfordBase32->encode($_6To10BitNumber));
+        $this->assertEquals($encoded, $crockfordBase32->encode($number));
     }
 
-    #[DataProvider('provide11To15BitNumbers')]
-    public function testCanEncode11To15BitNumber(int $_11To15BitNumber, string $expectedEncodedValue): void
+    #[DataProvider('provide35To60BitNumberEncodings')]
+    public function testCanEncode35To60BitNumbers(string $encoded, int $number): void
     {
+        if (4 === PHP_INT_SIZE) {
+            self::markTestSkipped('Requires 64-bit PHP');
+        }
+
         $crockfordBase32 = new CrockfordBase32();
-        $this->assertEquals($expectedEncodedValue, $crockfordBase32->encode($_11To15BitNumber));
+        $this->assertEquals($encoded, $crockfordBase32->encode($number));
     }
 }
